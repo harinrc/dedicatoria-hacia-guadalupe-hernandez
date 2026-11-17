@@ -343,7 +343,7 @@
   </div>
 
   <audio id="birthday-song" loop preload="none">
-    <source src="musica/nuestra-cancion.mpeg" type="audio/mpeg">
+    <source src="nuestra-cancion.mpeg" type="audio/mpeg">
   </audio>
 
   <button class="music-button" id="music-toggle" type="button" aria-pressed="false">
@@ -366,8 +366,8 @@
           <p class="hero-note">Una sorpresa hecha pensando en ti, momento a momento</p>
         </div>
         <div class="hero-visual" aria-label="Algunos de nuestros recuerdos favoritos">
-          <div class="hero-photo side"><img src="fotos/recuerdo-1.jpeg" alt="Un recuerdo bonito de los dos"></div>
-          <div class="hero-photo main"><img src="fotos/recuerdo-3.jpeg" alt="Una foto juntos en un momento especial"></div>
+          <div class="hero-photo side"><img src="recuerdo-1.jpeg" alt="Un recuerdo bonito de los dos"></div>
+          <div class="hero-photo main"><img src="recuerdo-3.jpeg" alt="Una foto juntos en un momento especial"></div>
           <div class="hero-badge"><span>Mi parte favorita</span>de tantos recuerdos bonitos eres tú ♡</div>
         </div>
       </div>
@@ -404,7 +404,7 @@
         <div class="photo-carousel reveal" id="photo-carousel" aria-label="Galería de recuerdos">
           <button class="carousel-arrow previous" id="previous-photo" type="button" aria-label="Ver foto anterior">‹</button>
           <button class="memory-card" id="memory-card" type="button" aria-label="Ampliar foto actual">
-            <img id="carousel-image" src="fotos/recuerdo-1.jpeg" alt="Un recuerdo especial juntos">
+            <img id="carousel-image" src="recuerdo-1.jpeg" alt="Un recuerdo especial juntos">
             <div class="photo-placeholder" id="carousel-placeholder" hidden><span aria-hidden="true">♡</span><span>No se pudo cargar esta foto. Revisa el nombre del archivo en la lista.</span></div>
           </button>
           <button class="carousel-arrow next" id="next-photo" type="button" aria-label="Ver foto siguiente">›</button>
@@ -451,12 +451,12 @@
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     // Add each new photo here, using its filename and a personal caption.
     const photos = [
-      { src: "fotos/recuerdo-1.jpeg", alt: "Un recuerdo especial juntos", caption: "De esos días que quisiera repetir" },
-      { src: "fotos/recuerdo-2.jpeg", alt: "Un momento feliz compartido", caption: "Tu risa siempre mejora la foto" },
-      { src: "fotos/recuerdo-3.jpeg", alt: "Otra aventura juntos", caption: "Y que vengan muchísimos más" },
-      { src: "fotos/recuerdo-4.jpeg", alt: "Otra aventura juntos", caption: "Y que vengan muchísimos más" },
-      { src: "fotos/recuerdo-5.jpeg", alt: "Otra aventura juntos", caption: "Y que vengan muchísimos más" },
-      { src: "fotos/recuerdo-6.jpeg", alt: "Otra aventura juntos", caption: "Y que vengan muchísimos más" }
+      { src: "recuerdo-1.jpeg", alt: "Un recuerdo especial juntos", caption: "De esos días que quisiera repetir" },
+      { src: "recuerdo-2.jpeg", alt: "Un momento feliz compartido", caption: "Tu risa siempre mejora la foto" },
+      { src: "recuerdo-3.jpeg", alt: "Otra aventura juntos", caption: "Y que vengan muchísimos más" },
+      { src: "recuerdo-4.jpeg", alt: "Otra aventura juntos", caption: "Y que vengan muchísimos más" },
+      { src: "recuerdo-5.jpeg", alt: "Otra aventura juntos", caption: "Y que vengan muchísimos más" },
+      { src: "recuerdo-6.jpeg", alt: "Otra aventura juntos", caption: "Y que vengan muchísimos más" }
       
     ];
     let loveNoteIndex = 0;
@@ -542,7 +542,7 @@
         musicLabel.textContent = "Pausar nuestra canción";
         musicToggle.setAttribute("aria-pressed", "true");
       } catch {
-        musicLabel.textContent = "Agrega tu canción en musica/";
+        musicLabel.textContent = "No se pudo reproducir nuestra canción";
       }
     });
 
@@ -553,7 +553,7 @@
           musicLabel.textContent = "Pausar nuestra canción";
           musicToggle.setAttribute("aria-pressed", "true");
         } catch {
-          musicLabel.textContent = "Agrega tu canción en musica/";
+          musicLabel.textContent = "No se pudo reproducir nuestra canción";
         }
       } else {
         song.pause();
