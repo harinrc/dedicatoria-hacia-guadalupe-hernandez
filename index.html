@@ -77,21 +77,35 @@
       right: 1rem;
       display: flex;
       align-items: center;
-      gap: .55rem;
-      border: 1px solid #ffffffc9;
-      border-radius: 999px;
-      padding: .72rem 1rem;
-      color: var(--ink);
-      background: #fffaf2e8;
-      box-shadow: 0 8px 26px #50313d14;
+      gap: .75rem;
+      min-width: 220px;
+      border: 1px solid #fff9;
+      border-radius: 1rem;
+      padding: .6rem .9rem .6rem .65rem;
+      color: #fff8f4;
+      background: linear-gradient(135deg, #543747f2, #302330f2);
+      box-shadow: 0 10px 30px #30202b35, inset 0 1px #ffffff18;
       cursor: pointer;
-      backdrop-filter: blur(12px);
+      text-align: left;
+      backdrop-filter: blur(16px);
+      transition: transform .25s, box-shadow .25s, border-color .25s;
     }
 
-    .music-button:hover, .music-button:focus-visible {
-      outline: 2px solid var(--rose);
-      outline-offset: 3px;
-    }
+    .music-button:hover { border-color: #edcba7; box-shadow: 0 14px 34px #30202b45, 0 0 0 3px #d7b58b18; transform: translateY(-2px); }
+    .music-button:focus-visible { outline: 2px solid var(--rose); outline-offset: 3px; }
+    .music-record { position: relative; display: grid; width: 42px; height: 42px; flex: 0 0 auto; place-items: center; border: 1px solid #ffffff40; border-radius: 50%; background: repeating-radial-gradient(circle, #352630 0 2px, #4a3341 3px 4px); box-shadow: 0 3px 12px #160e1b70; }
+    .music-record::before { width: 13px; height: 13px; border: 3px solid #f0c99e; border-radius: 50%; background: var(--rose-dark); content: ""; }
+    .music-record::after { position: absolute; top: 5px; right: 8px; width: 3px; height: 3px; border-radius: 50%; background: #fff4e5; box-shadow: -25px 24px #fff4e555; content: ""; }
+    .music-button.is-playing .music-record { animation: record-spin 5s linear infinite; }
+    .music-copy { display: grid; min-width: 0; gap: .16rem; }
+    .music-title { overflow: hidden; color: #fff8f4; font: 600 .85rem/1.2 var(--sans); text-overflow: ellipsis; white-space: nowrap; }
+    .music-status { color: #edcba7; font-size: .72rem; line-height: 1.2; }
+    .music-button.has-error .music-status { color: #f2b9c3; }
+    .music-equalizer { display: flex; height: 17px; align-items: center; gap: 2px; margin-left: auto; }
+    .music-equalizer i { display: block; width: 3px; height: 4px; border-radius: 3px; background: #edcba7; }
+    .music-button.is-playing .music-equalizer i { animation: equalize .7s ease-in-out infinite alternate; }
+    .music-button.is-playing .music-equalizer i:nth-child(2) { animation-delay: .18s; }
+    .music-button.is-playing .music-equalizer i:nth-child(3) { animation-delay: .36s; }
 
     .hero {
       position: relative;
@@ -394,6 +408,8 @@
     @keyframes wrap-appear { from { opacity: 0; transform: translateY(20px) scale(.75); } to { opacity: 1; transform: translateY(0) scale(1); } }
     @keyframes ribbon-appear { from { opacity: 0; transform: scale(.3); } to { opacity: 1; transform: scale(1); } }
     @keyframes bouquet-twinkle { 0%, 100% { opacity: .35; transform: scale(.8); } 50% { opacity: 1; transform: scale(1.2); } }
+    @keyframes record-spin { to { transform: rotate(360deg); } }
+    @keyframes equalize { from { height: 4px; } to { height: 16px; } }
 
     @media (max-width: 700px) {
       .photo-carousel { width: min(420px, 100%); padding: 0 2.3rem; }
@@ -401,7 +417,10 @@
       .carousel-arrow { width: 38px; height: 38px; font-size: 1.35rem; }
       section { padding: 4.5rem 1.15rem; }
       .letter-section { padding-top: 0; }
-      .music-button { top: .7rem; right: .7rem; padding: .65rem .85rem; }
+      .music-button { top: .7rem; right: .7rem; min-width: 0; gap: .6rem; padding: .5rem .7rem .5rem .5rem; }
+      .music-record { width: 38px; height: 38px; }
+      .music-title { font-size: .78rem; }
+      .music-status { font-size: .68rem; }
       .hero { min-height: 100svh; padding: 6rem 1.35rem 5rem; text-align: center; }
       .hero::before { top: 72%; right: 50%; width: min(88vw, 390px); transform: translate(50%, -50%); }
       .hero-layout { flex-direction: column; gap: 1rem; }
@@ -419,6 +438,7 @@
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
       .bouquet-overlay { transition: none; }
+      .music-button.is-playing .music-record, .music-button.is-playing .music-equalizer i { animation: none; }
     }
   </style>
 </head>
@@ -440,8 +460,13 @@
     <source src="nuestra-cancion.mpeg" type="audio/mpeg">
   </audio>
 
-  <button class="music-button" id="music-toggle" type="button" aria-pressed="false">
-    <span aria-hidden="true">♫</span><span id="music-label">Poner nuestra canción</span>
+  <button class="music-button" id="music-toggle" type="button" aria-pressed="false" aria-label="Reproducir nuestra canción">
+    <span class="music-record" aria-hidden="true"></span>
+    <span class="music-copy">
+      <span class="music-title">Nuestra canción</span>
+      <span class="music-status" id="music-label">Toca para reproducir</span>
+    </span>
+    <span class="music-equalizer" aria-hidden="true"><i></i><i></i><i></i></span>
   </button>
 
   <main>
@@ -718,6 +743,22 @@
       }, 4500);
     }
 
+    function setMusicState(state) {
+      const isPlaying = state === "playing";
+      const hasError = state === "error";
+      musicToggle.classList.toggle("is-playing", isPlaying);
+      musicToggle.classList.toggle("has-error", hasError);
+      musicToggle.setAttribute("aria-pressed", String(isPlaying));
+      musicToggle.setAttribute("aria-label", `${isPlaying ? "Pausar" : "Reproducir"} nuestra canción`);
+      musicLabel.textContent = isPlaying ? "Reproduciendo para ti" : hasError ? "No se pudo reproducir" : "Toca para reproducir";
+    }
+
+    song.addEventListener("play", () => setMusicState("playing"));
+    song.addEventListener("pause", () => {
+      if (!song.error) setMusicState("paused");
+    });
+    song.addEventListener("error", () => setMusicState("error"));
+
     document.querySelector("#previous-photo").addEventListener("click", () => {
       showPhoto(currentPhoto - 1);
       startCarousel();
@@ -754,10 +795,8 @@
       burstHearts(30);
       try {
         await song.play();
-        musicLabel.textContent = "Pausar nuestra canción";
-        musicToggle.setAttribute("aria-pressed", "true");
       } catch {
-        musicLabel.textContent = "No se pudo reproducir nuestra canción";
+        setMusicState("error");
       }
     });
 
@@ -765,15 +804,11 @@
       if (song.paused) {
         try {
           await song.play();
-          musicLabel.textContent = "Pausar nuestra canción";
-          musicToggle.setAttribute("aria-pressed", "true");
         } catch {
-          musicLabel.textContent = "No se pudo reproducir nuestra canción";
+          setMusicState("error");
         }
       } else {
         song.pause();
-        musicLabel.textContent = "Poner nuestra canción";
-        musicToggle.setAttribute("aria-pressed", "false");
       }
     });
 
