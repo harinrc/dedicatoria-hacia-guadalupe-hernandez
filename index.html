@@ -105,7 +105,8 @@
     .hero-layout { display: flex; width: 100%; max-width: 1100px; align-items: center; justify-content: space-between; gap: 2rem; margin: 0 auto; }
     .hero-visual { position: relative; width: min(42vw, 420px); height: 470px; flex: 0 0 auto; }
     .hero-photo { position: absolute; overflow: hidden; border: 10px solid white; border-radius: 1.2rem; background: var(--peach); box-shadow: 0 28px 75px #55313b2b; }
-    .hero-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    .hero-photo img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .8s ease; }
+    .hero-photo img.is-active { opacity: 1; }
     .hero-photo.main { z-index: 1; inset: 25px 35px 20px 50px; transform: rotate(4deg); animation: photo-arrive 1s .25s both; }
     .hero-photo.side { inset: 110px 170px 100px -10px; transform: rotate(-9deg); animation: photo-arrive 1s .55s both; }
     .hero-badge { position: absolute; z-index: 2; right: 0; bottom: 34px; max-width: 195px; border: 1px solid #fff9; border-radius: 1rem; padding: 1rem 1.2rem; color: #684655; background: #fff9f2ed; box-shadow: 0 12px 32px #55313b20; font: italic 1.05rem/1.5 var(--serif); transform: rotate(-4deg); }
@@ -366,8 +367,14 @@
           <p class="hero-note">Una sorpresa hecha pensando en ti, momento a momento</p>
         </div>
         <div class="hero-visual" aria-label="Algunos de nuestros recuerdos favoritos">
-          <div class="hero-photo side"><img src="recuerdo-1.jpeg" alt="Un recuerdo bonito de los dos"></div>
-          <div class="hero-photo main"><img src="recuerdo-3.jpeg" alt="Una foto juntos en un momento especial"></div>
+          <div class="hero-photo side">
+            <img class="hero-image is-active" src="recuerdo-1.jpeg" alt="Un recuerdo bonito de los dos">
+            <img class="hero-image" alt="" aria-hidden="true">
+          </div>
+          <div class="hero-photo main">
+            <img class="hero-image is-active" src="recuerdo-3.jpeg" alt="Una foto juntos en un momento especial">
+            <img class="hero-image" alt="" aria-hidden="true">
+          </div>
           <div class="hero-badge"><span>Mi parte favorita</span>de tantos recuerdos bonitos eres tú ♡</div>
         </div>
       </div>
@@ -448,6 +455,10 @@
     const carouselPlaceholder = document.querySelector("#carousel-placeholder");
     const carouselDots = document.querySelector("#carousel-dots");
     const memoryCard = document.querySelector("#memory-card");
+    const heroFrames = [
+      { element: document.querySelector(".hero-photo.side"), photoIndex: 0 },
+      { element: document.querySelector(".hero-photo.main"), photoIndex: 2 }
+    ];
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     // Add each new photo here, using its filename and a personal caption.
     const photos = [
@@ -462,6 +473,7 @@
     let loveNoteIndex = 0;
     let currentPhoto = 0;
     let carouselTimer;
+    let heroCarouselTimer;
     let lastFocusedElement;
 
     photos.forEach((photo, index) => {
@@ -492,15 +504,49 @@
       }
     }
 
+    function showHeroPhoto(frame, photo) {
+      const activeImage = frame.querySelector(".hero-image.is-active");
+      const nextImage = [...frame.querySelectorAll(".hero-image")].find((image) => image !== activeImage);
+      if (!nextImage) return;
+
+      const activateImage = () => {
+        nextImage.onload = null;
+        nextImage.onerror = null;
+        if (!nextImage.naturalWidth) return;
+        activeImage.classList.remove("is-active");
+        activeImage.alt = "";
+        activeImage.setAttribute("aria-hidden", "true");
+        nextImage.alt = photo.alt;
+        nextImage.removeAttribute("aria-hidden");
+        nextImage.classList.add("is-active");
+      };
+
+      nextImage.onload = activateImage;
+      nextImage.onerror = () => {
+        nextImage.onload = null;
+        nextImage.onerror = null;
+      };
+      nextImage.src = photo.src;
+      if (nextImage.complete) activateImage();
+    }
+
     function stopCarousel() {
       window.clearInterval(carouselTimer);
       carouselTimer = undefined;
+      window.clearInterval(heroCarouselTimer);
+      heroCarouselTimer = undefined;
     }
 
     function startCarousel() {
       stopCarousel();
       if (reducedMotion.matches || document.hidden || opening.isConnected || !lightbox.hidden || photos.length < 2) return;
       carouselTimer = window.setInterval(() => showPhoto(currentPhoto + 1), 4500);
+      heroCarouselTimer = window.setInterval(() => {
+        heroFrames.forEach((frame) => {
+          frame.photoIndex = (frame.photoIndex + 1) % photos.length;
+          showHeroPhoto(frame.element, photos[frame.photoIndex]);
+        });
+      }, 4500);
     }
 
     document.querySelector("#previous-photo").addEventListener("click", () => {
