@@ -15,6 +15,7 @@
       --paper: #fffaf7;
       --peach: #ffe4d7;
       --lilac: #eee5f8;
+      --gold: #c9a477;
       --serif: Georgia, "Times New Roman", serif;
       --sans: "Segoe UI", Arial, sans-serif;
     }
@@ -29,6 +30,7 @@
       background:
         radial-gradient(ellipse at 8% 15%, #ffe6dd 0, transparent 32rem),
         radial-gradient(ellipse at 92% 38%, #f1e9fa 0, transparent 34rem),
+        radial-gradient(ellipse at 50% 100%, #f8e9df 0, transparent 42rem),
         var(--paper);
       font-family: var(--sans);
     }
@@ -36,6 +38,8 @@
     body.surprise-closed { overflow: hidden; }
     button { font: inherit; }
     [hidden] { display: none !important; }
+
+    ::selection { color: white; background: var(--rose-dark); }
 
     .opening {
       position: fixed;
@@ -97,6 +101,21 @@
       overflow: hidden;
       padding: 6rem max(1.5rem, calc((100vw - 1100px) / 2)) 4rem;
       text-align: left;
+      isolation: isolate;
+    }
+
+    .hero::before {
+      position: absolute;
+      z-index: -1;
+      top: 50%;
+      right: max(2rem, calc((100vw - 1100px) / 2));
+      width: min(45vw, 540px);
+      aspect-ratio: 1;
+      border: 1px solid #d9b79555;
+      border-radius: 50%;
+      box-shadow: 0 0 0 24px #d9b7950b, 0 0 0 52px #d9b79508;
+      content: "";
+      transform: translateY(-50%);
     }
 
     .hero-content { position: relative; z-index: 1; width: min(540px, 55%); }
@@ -109,7 +128,7 @@
     .hero-photo img.is-active { opacity: 1; }
     .hero-photo.main { z-index: 1; inset: 25px 35px 20px 50px; transform: rotate(4deg); animation: photo-arrive 1s .25s both; }
     .hero-photo.side { inset: 110px 170px 100px -10px; transform: rotate(-9deg); animation: photo-arrive 1s .55s both; }
-    .hero-badge { position: absolute; z-index: 2; right: 0; bottom: 34px; max-width: 195px; border: 1px solid #fff9; border-radius: 1rem; padding: 1rem 1.2rem; color: #684655; background: #fff9f2ed; box-shadow: 0 12px 32px #55313b20; font: italic 1.05rem/1.5 var(--serif); transform: rotate(-4deg); }
+    .hero-badge { position: absolute; z-index: 2; right: 0; bottom: 34px; max-width: 195px; border: 1px solid #fff9; border-radius: 1rem; padding: 1rem 1.2rem; color: #684655; background: #fff9f2ed; box-shadow: 0 12px 32px #55313b20; font: italic 1.05rem/1.5 var(--serif); backdrop-filter: blur(12px); transform: rotate(-4deg); }
     .hero-badge span { display: block; color: var(--rose-dark); font-size: 1.35rem; }
     .scroll-cue { position: absolute; bottom: 1.4rem; left: 50%; color: #a38b92; font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; transform: translateX(-50%); }
     .scroll-cue::after { display: block; width: 1px; height: 30px; margin: .55rem auto 0; background: #d7b8bd; content: ""; animation: cue 1.5s ease-in-out infinite; }
@@ -124,7 +143,7 @@
 
     h1 {
       margin: 1rem 0;
-      font: 400 clamp(3rem, 9vw, 6.7rem)/.98 var(--serif);
+      font: 400 clamp(3rem, 7.2vw, 5.8rem)/.98 var(--serif);
       letter-spacing: -.055em;
     }
 
@@ -178,11 +197,11 @@
       position: relative;
       max-width: 740px;
       margin: 0 auto;
-      border: 1px solid #f4e3df;
+      border: 1px solid #ead8cb;
       border-radius: 1.5rem;
-      padding: clamp(2rem, 7vw, 4.5rem);
-      background: #fffdfbdb;
-      box-shadow: 0 24px 80px #693d4a10;
+      padding: clamp(2.3rem, 7vw, 4.8rem);
+      background: linear-gradient(145deg, #fffefa, #fff9f4);
+      box-shadow: 0 24px 80px #693d4a12, inset 0 0 0 7px #fffefa, inset 0 0 0 8px #f4e8df;
     }
 
     .letter::before {
@@ -195,10 +214,18 @@
     }
 
     .letter p { color: #65525a; font: 1.08rem/2 var(--serif); }
+    .letter p:not(.eyebrow, .signature) { text-wrap: pretty; }
     .letter .salute { color: var(--rose-dark); font-size: 1.25rem; }
     .signature { margin-top: 2rem; color: var(--rose-dark); font: italic 1.6rem var(--serif); }
 
-    .memories { background: linear-gradient(180deg, #fff5f0aa, #f8f2f8aa); }
+    .memories { position: relative; overflow: hidden; color: #fff8f4; background: radial-gradient(ellipse at 50% 0, #714b60 0, transparent 48rem), #30232f; }
+    .memories::before, .memories::after { position: absolute; width: 18rem; aspect-ratio: 1; border: 1px solid #d7b58b22; border-radius: 50%; content: ""; pointer-events: none; }
+    .memories::before { top: 4rem; left: -12rem; box-shadow: 0 0 0 24px #d7b58b08, 0 0 0 48px #d7b58b06; }
+    .memories::after { right: -12rem; bottom: 4rem; box-shadow: 0 0 0 24px #d7b58b08, 0 0 0 48px #d7b58b06; }
+    .memories .section-inner { position: relative; z-index: 1; }
+    .memories .eyebrow { color: #e7c7a6; }
+    .memories .section-intro { color: #e2d0d5; }
+    .memories .section-heading { color: #fff8f4; }
     .photo-carousel {
       position: relative;
       width: min(460px, 100%);
@@ -216,13 +243,13 @@
       border: 8px solid white;
       border-radius: 1.3rem;
       background: linear-gradient(145deg, #f5d5cd, #e8def3 55%, #f9e9d8);
-      box-shadow: 0 20px 55px #58344220;
+      box-shadow: 0 24px 70px #100a162e, 0 0 0 1px #ffffff24;
       transform: rotate(-1deg);
       transition: transform .3s, box-shadow .3s;
       cursor: zoom-in;
     }
 
-    .memory-card:hover { transform: translateY(-4px) rotate(0); box-shadow: 0 24px 60px #5834422b; }
+    .memory-card:hover { transform: translateY(-4px) rotate(0); box-shadow: 0 30px 75px #100a1645, 0 0 0 1px #ffffff40; }
     .memory-card:focus-visible { outline: 3px solid var(--rose); outline-offset: 4px; }
     .memory-card img { display: block; width: 100%; height: 100%; object-fit: cover; }
     .memory-card img.is-changing { animation: memory-arrive .75s cubic-bezier(.2,.7,.2,1) both; }
@@ -257,32 +284,50 @@
     }
 
     .carousel-arrow:hover { transform: scale(1.08); background: white; }
-    .carousel-arrow:focus-visible, .carousel-dot:focus-visible { outline: 2px solid var(--rose-dark); outline-offset: 3px; }
+    .carousel-arrow:focus-visible, .carousel-thumbnail:focus-visible { outline: 2px solid var(--rose-dark); outline-offset: 3px; }
     .carousel-arrow.previous { left: 0; }
     .carousel-arrow.next { right: 0; }
-    .carousel-caption { min-height: 2rem; margin: 1.15rem 0 .9rem; color: var(--muted); font: italic 1.15rem var(--serif); }
-    .carousel-dots { display: flex; justify-content: center; gap: .55rem; }
-    .carousel-dot { width: 9px; height: 9px; border: 0; border-radius: 999px; padding: 0; background: #d9c2ca; cursor: pointer; transition: width .25s, background .25s; }
-    .carousel-dot[aria-current="true"] { width: 25px; background: var(--rose); }
-    .carousel-hint { margin: .9rem 0 0; color: #947f86; font-size: .82rem; }
+    .carousel-caption { min-height: 2rem; margin: 1.15rem 0 .9rem; color: #f0dce5; font: italic 1.2rem var(--serif); }
+    .carousel-thumbnails { display: flex; justify-content: center; gap: .6rem; max-width: 100%; overflow-x: auto; padding: .5rem .3rem .8rem; scrollbar-color: #b9858e #ffffff1a; scrollbar-width: thin; }
+    .carousel-thumbnail { width: 52px; height: 64px; flex: 0 0 auto; overflow: hidden; border: 2px solid #fff8; border-radius: .45rem; padding: 3px; background: #fff; cursor: pointer; opacity: .62; transform: rotate(-3deg); transition: opacity .25s, transform .25s, box-shadow .25s; }
+    .carousel-thumbnail:nth-child(even) { transform: rotate(3deg); }
+    .carousel-thumbnail:hover { opacity: .9; transform: translateY(-3px) rotate(0); }
+    .carousel-thumbnail[aria-current="true"] { border-color: #f2c99e; box-shadow: 0 0 0 2px #f2c99e55, 0 7px 20px #0003; opacity: 1; transform: translateY(-4px) rotate(0); }
+    .carousel-thumbnail:focus-visible { outline: 2px solid #f2c99e; outline-offset: 3px; }
+    .carousel-thumbnail img { display: block; width: 100%; height: 100%; border-radius: .2rem; object-fit: cover; }
+    .carousel-hint { margin: .6rem 0 0; color: #d5c1c9; font-size: .82rem; }
 
     .photo-placeholder span:first-child { font-size: 2.2rem; }
     .photo-placeholder span:last-child { padding: 0 1rem; font: italic 1rem var(--serif); }
 
     .wish-section { text-align: center; }
     .wish-card {
+      position: relative;
+      overflow: hidden;
       max-width: 650px;
       margin: 0 auto;
+      border: 1px solid #d7b58b75;
       border-radius: 1.5rem;
-      padding: 3rem 1.5rem;
-      background: linear-gradient(135deg, #ffe9df, #f4eafa);
+      padding: 3.5rem 1.8rem;
+      color: #fff8f4;
+      background: radial-gradient(ellipse at 50% 0, #76485e, transparent 70%), linear-gradient(145deg, #382632, #251c29);
+      box-shadow: 0 24px 70px #55313b1c;
     }
 
-    .wish-card p { color: #725c65; font: 1.15rem/1.8 var(--serif); }
+    .wish-card::before, .wish-card::after { position: absolute; width: 10rem; aspect-ratio: 1; border: 1px solid #e8c89c28; border-radius: 50%; content: ""; pointer-events: none; }
+    .wish-card::before { top: -6rem; right: -4rem; box-shadow: 0 0 0 14px #e8c89c08, 0 0 0 28px #e8c89c06; }
+    .wish-card::after { bottom: -7rem; left: -5rem; }
+    .wish-card > * { position: relative; z-index: 1; }
+    .wish-card .eyebrow { color: #edcba7; }
+    .wish-card .section-heading { color: #fff8f4; }
+    .wish-card p { color: #ead9df; font: 1.15rem/1.8 var(--serif); }
+    .wish-card .primary-button { color: #422b35; background: #f2d5bf; box-shadow: 0 12px 30px #120b1840; }
+    .wish-card .primary-button:hover { background: #ffe5d4; }
     .heart-button { margin-top: .8rem; font-size: 1rem; }
-    .love-note { min-height: 2rem; margin: 1rem 0 0 !important; color: var(--rose-dark) !important; font-style: italic !important; }
+    .love-note { min-height: 2rem; margin: 1rem 0 0 !important; color: #f0c4d2 !important; font-style: italic !important; }
 
     footer { padding: 2rem 1rem 3rem; color: #947f86; font-size: .85rem; text-align: center; }
+    footer::before { display: block; width: 5rem; height: 1px; margin: 0 auto 1.5rem; background: linear-gradient(90deg, transparent, var(--gold), transparent); content: ""; }
 
     .lightbox { position: fixed; z-index: 15; inset: 0; display: grid; place-items: center; padding: 2rem; background: #211720ed; }
     .lightbox img { display: block; max-width: min(900px, 92vw); max-height: 82vh; border: 8px solid white; border-radius: 1rem; box-shadow: 0 25px 90px #0008; }
@@ -312,6 +357,7 @@
       .letter-section { padding-top: 0; }
       .music-button { top: .7rem; right: .7rem; padding: .65rem .85rem; }
       .hero { min-height: 100svh; padding: 6rem 1.35rem 5rem; text-align: center; }
+      .hero::before { top: 72%; right: 50%; width: min(88vw, 390px); transform: translate(50%, -50%); }
       .hero-layout { flex-direction: column; gap: 1rem; }
       .hero-content { width: 100%; }
       .hero-content .hero-copy { margin: 1.4rem auto 2rem; }
@@ -416,7 +462,7 @@
           </button>
           <button class="carousel-arrow next" id="next-photo" type="button" aria-label="Ver foto siguiente">›</button>
           <p class="carousel-caption" id="carousel-caption" aria-live="polite">De esos días que quisiera repetir</p>
-          <div class="carousel-dots" id="carousel-dots" aria-label="Elegir una foto"></div>
+          <div class="carousel-thumbnails" id="carousel-thumbnails" role="group" aria-label="Elegir una foto"></div>
           <p class="carousel-hint">Las fotos cambian solitas, pero puedes recorrerlas a tu ritmo ♡</p>
         </div>
       </div>
@@ -453,7 +499,7 @@
     const carouselImage = document.querySelector("#carousel-image");
     const carouselCaption = document.querySelector("#carousel-caption");
     const carouselPlaceholder = document.querySelector("#carousel-placeholder");
-    const carouselDots = document.querySelector("#carousel-dots");
+    const carouselThumbnails = document.querySelector("#carousel-thumbnails");
     const memoryCard = document.querySelector("#memory-card");
     const heroFrames = [
       { element: document.querySelector(".hero-photo.side"), photoIndex: 0 },
@@ -477,13 +523,20 @@
     let lastFocusedElement;
 
     photos.forEach((photo, index) => {
-      const dot = document.createElement("button");
-      dot.className = "carousel-dot";
-      dot.type = "button";
-      dot.setAttribute("aria-label", `Ver foto ${index + 1} de ${photos.length}`);
-      dot.setAttribute("aria-current", index === currentPhoto ? "true" : "false");
-      dot.addEventListener("click", () => showPhoto(index));
-      carouselDots.append(dot);
+      const thumbnail = document.createElement("button");
+      thumbnail.className = "carousel-thumbnail";
+      thumbnail.type = "button";
+      thumbnail.setAttribute("aria-label", `Ver foto ${index + 1} de ${photos.length}`);
+      thumbnail.setAttribute("aria-current", index === currentPhoto ? "true" : "false");
+      const thumbnailImage = document.createElement("img");
+      thumbnailImage.src = photo.src;
+      thumbnailImage.alt = "";
+      thumbnail.append(thumbnailImage);
+      thumbnail.addEventListener("click", () => {
+        showPhoto(index);
+        startCarousel();
+      });
+      carouselThumbnails.append(thumbnail);
     });
 
     function showPhoto(index) {
@@ -496,8 +549,8 @@
       carouselImage.alt = photo.alt;
       carouselCaption.textContent = photo.caption;
       memoryCard.setAttribute("aria-label", `Ampliar foto: ${photo.alt}`);
-      carouselDots.querySelectorAll(".carousel-dot").forEach((dot, dotIndex) => {
-        dot.setAttribute("aria-current", dotIndex === currentPhoto ? "true" : "false");
+      carouselThumbnails.querySelectorAll(".carousel-thumbnail").forEach((thumbnail, thumbnailIndex) => {
+        thumbnail.setAttribute("aria-current", thumbnailIndex === currentPhoto ? "true" : "false");
       });
       if (!reducedMotion.matches) {
         requestAnimationFrame(() => carouselImage.classList.add("is-changing"));
