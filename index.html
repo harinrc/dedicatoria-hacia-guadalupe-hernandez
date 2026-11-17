@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#fff8f4">
+  <title>Un día para celebrar lo especial que eres</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #3d2932;
+      --muted: #806b73;
+      --rose: #d66b83;
+      --rose-dark: #a94361;
+      --paper: #fffaf7;
+      --peach: #ffe4d7;
+      --lilac: #eee5f8;
+      --serif: Georgia, "Times New Roman", serif;
+      --sans: "Segoe UI", Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(ellipse at 8% 15%, #ffe6dd 0, transparent 32rem),
+        radial-gradient(ellipse at 92% 38%, #f1e9fa 0, transparent 34rem),
+        var(--paper);
+      font-family: var(--sans);
+    }
+
+    body.surprise-closed { overflow: hidden; }
+    button { font: inherit; }
+    [hidden] { display: none !important; }
+
+    .opening {
+      position: fixed;
+      z-index: 20;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      padding: 1.5rem;
+      color: #fff8f4;
+      background:
+        radial-gradient(ellipse at 50% 34%, #89536a 0, transparent 38%),
+        radial-gradient(ellipse at 15% 90%, #633d58 0, transparent 40%),
+        #291c2b;
+      text-align: center;
+      transition: opacity .8s ease, visibility .8s ease;
+    }
+
+    .opening.is-opening { opacity: 0; visibility: hidden; }
+    .opening-content { position: relative; z-index: 1; width: min(520px, 100%); }
+    .gift { display: block; margin-bottom: 1.2rem; font-size: 4.5rem; animation: gift-bob 2.4s ease-in-out infinite; }
+    .opening h2 { margin: .6rem 0 1rem; font: 400 clamp(2.5rem, 8vw, 4.8rem)/1.05 var(--serif); }
+    .opening p { margin: 0 auto 1.7rem; color: #f0dce5; font: 1.1rem/1.8 var(--serif); }
+    .opening .primary-button { color: #54283a; background: #ffe4d7; box-shadow: 0 12px 35px #0e081040; }
+    .opening .eyebrow { color: #ffc2ce; }
+    .opening-star { position: absolute; color: #ffc7c8; animation: twinkle 3s ease-in-out infinite; }
+    .opening-star.a { top: 20%; left: 18%; }
+    .opening-star.b { top: 28%; right: 20%; animation-delay: .8s; }
+    .opening-star.c { bottom: 17%; right: 27%; animation-delay: 1.4s; }
+
+    .music-button {
+      position: fixed;
+      z-index: 5;
+      top: 1rem;
+      right: 1rem;
+      display: flex;
+      align-items: center;
+      gap: .55rem;
+      border: 1px solid #ffffffc9;
+      border-radius: 999px;
+      padding: .72rem 1rem;
+      color: var(--ink);
+      background: #fffaf2e8;
+      box-shadow: 0 8px 26px #50313d14;
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+    }
+
+    .music-button:hover, .music-button:focus-visible {
+      outline: 2px solid var(--rose);
+      outline-offset: 3px;
+    }
+
+    .hero {
+      position: relative;
+      display: flex;
+      min-height: 92svh;
+      align-items: center;
+      overflow: hidden;
+      padding: 6rem max(1.5rem, calc((100vw - 1100px) / 2)) 4rem;
+      text-align: left;
+    }
+
+    .hero-content { position: relative; z-index: 1; width: min(540px, 55%); }
+    .hero-content .hero-copy { margin-left: 0; }
+    .hero-content .hero-note { margin-left: .2rem; }
+    .hero-layout { display: flex; width: 100%; max-width: 1100px; align-items: center; justify-content: space-between; gap: 2rem; margin: 0 auto; }
+    .hero-visual { position: relative; width: min(42vw, 420px); height: 470px; flex: 0 0 auto; }
+    .hero-photo { position: absolute; overflow: hidden; border: 10px solid white; border-radius: 1.2rem; background: var(--peach); box-shadow: 0 28px 75px #55313b2b; }
+    .hero-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    .hero-photo.main { z-index: 1; inset: 25px 35px 20px 50px; transform: rotate(4deg); animation: photo-arrive 1s .25s both; }
+    .hero-photo.side { inset: 110px 170px 100px -10px; transform: rotate(-9deg); animation: photo-arrive 1s .55s both; }
+    .hero-badge { position: absolute; z-index: 2; right: 0; bottom: 34px; max-width: 195px; border: 1px solid #fff9; border-radius: 1rem; padding: 1rem 1.2rem; color: #684655; background: #fff9f2ed; box-shadow: 0 12px 32px #55313b20; font: italic 1.05rem/1.5 var(--serif); transform: rotate(-4deg); }
+    .hero-badge span { display: block; color: var(--rose-dark); font-size: 1.35rem; }
+    .scroll-cue { position: absolute; bottom: 1.4rem; left: 50%; color: #a38b92; font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; transform: translateX(-50%); }
+    .scroll-cue::after { display: block; width: 1px; height: 30px; margin: .55rem auto 0; background: #d7b8bd; content: ""; animation: cue 1.5s ease-in-out infinite; }
+
+    .eyebrow {
+      color: var(--rose-dark);
+      font-size: .76rem;
+      font-weight: 700;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 1rem 0;
+      font: 400 clamp(3rem, 9vw, 6.7rem)/.98 var(--serif);
+      letter-spacing: -.055em;
+    }
+
+    h1 span { color: var(--rose); font-style: italic; }
+
+    .hero-copy {
+      max-width: 470px;
+      margin: 1.4rem auto 2rem;
+      color: var(--muted);
+      font: 1.08rem/1.8 var(--serif);
+    }
+
+    .primary-button {
+      display: inline-flex;
+      align-items: center;
+      gap: .65rem;
+      border: 0;
+      border-radius: 999px;
+      padding: .95rem 1.4rem;
+      color: white;
+      background: var(--rose-dark);
+      box-shadow: 0 12px 30px #a9436130;
+      cursor: pointer;
+      transition: transform .2s, box-shadow .2s;
+    }
+
+    .primary-button:hover { transform: translateY(-3px); box-shadow: 0 16px 34px #a9436140; }
+    .primary-button:focus-visible { outline: 3px solid var(--rose); outline-offset: 4px; }
+
+    .hero-note { margin-top: 1.15rem; color: #947f86; font-size: .83rem; }
+
+    .sparkle, .float-heart {
+      position: absolute;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .sparkle { color: #d99478; animation: twinkle 3s ease-in-out infinite; }
+    .sparkle.one { top: 22%; left: 18%; font-size: 1.4rem; }
+    .sparkle.two { top: 30%; right: 17%; font-size: 1rem; animation-delay: .8s; }
+    .sparkle.three { bottom: 20%; left: 25%; font-size: .9rem; animation-delay: 1.4s; }
+
+    section { padding: 6rem 1.5rem; }
+    .section-inner { width: min(1000px, 100%); margin: 0 auto; }
+    .section-heading { margin: 0 0 .7rem; font: 400 clamp(2.2rem, 5vw, 3.5rem)/1.1 var(--serif); }
+    .section-intro { margin: 0 auto 2.7rem; color: var(--muted); line-height: 1.7; }
+    .center { text-align: center; }
+
+    .letter-section { padding-top: 1rem; }
+    .letter {
+      position: relative;
+      max-width: 740px;
+      margin: 0 auto;
+      border: 1px solid #f4e3df;
+      border-radius: 1.5rem;
+      padding: clamp(2rem, 7vw, 4.5rem);
+      background: #fffdfbdb;
+      box-shadow: 0 24px 80px #693d4a10;
+    }
+
+    .letter::before {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      color: #e9b5b4;
+      content: "✿";
+      font-size: 1.4rem;
+    }
+
+    .letter p { color: #65525a; font: 1.08rem/2 var(--serif); }
+    .letter .salute { color: var(--rose-dark); font-size: 1.25rem; }
+    .signature { margin-top: 2rem; color: var(--rose-dark); font: italic 1.6rem var(--serif); }
+
+    .memories { background: linear-gradient(180deg, #fff5f0aa, #f8f2f8aa); }
+    .photo-carousel {
+      position: relative;
+      width: min(460px, 100%);
+      margin: 0 auto;
+      padding: 0 3.5rem;
+    }
+
+    .memory-card {
+      position: relative;
+      display: block;
+      width: 100%;
+      height: min(68vw, 520px);
+      min-height: 330px;
+      overflow: hidden;
+      border: 8px solid white;
+      border-radius: 1.3rem;
+      background: linear-gradient(145deg, #f5d5cd, #e8def3 55%, #f9e9d8);
+      box-shadow: 0 20px 55px #58344220;
+      transform: rotate(-1deg);
+      transition: transform .3s, box-shadow .3s;
+      cursor: zoom-in;
+    }
+
+    .memory-card:hover { transform: translateY(-4px) rotate(0); box-shadow: 0 24px 60px #5834422b; }
+    .memory-card:focus-visible { outline: 3px solid var(--rose); outline-offset: 4px; }
+    .memory-card img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    .memory-card img.is-changing { animation: memory-arrive .75s cubic-bezier(.2,.7,.2,1) both; }
+
+    .photo-placeholder {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      gap: .5rem;
+      color: #845e68;
+      text-align: center;
+    }
+
+    .carousel-arrow {
+      position: absolute;
+      z-index: 2;
+      top: 45%;
+      display: grid;
+      width: 44px;
+      height: 44px;
+      place-items: center;
+      border: 1px solid #fff;
+      border-radius: 50%;
+      color: var(--rose-dark);
+      background: #fffaf2ed;
+      box-shadow: 0 7px 22px #50313d1c;
+      font-size: 1.6rem;
+      cursor: pointer;
+      transition: transform .2s, background .2s;
+    }
+
+    .carousel-arrow:hover { transform: scale(1.08); background: white; }
+    .carousel-arrow:focus-visible, .carousel-dot:focus-visible { outline: 2px solid var(--rose-dark); outline-offset: 3px; }
+    .carousel-arrow.previous { left: 0; }
+    .carousel-arrow.next { right: 0; }
+    .carousel-caption { min-height: 2rem; margin: 1.15rem 0 .9rem; color: var(--muted); font: italic 1.15rem var(--serif); }
+    .carousel-dots { display: flex; justify-content: center; gap: .55rem; }
+    .carousel-dot { width: 9px; height: 9px; border: 0; border-radius: 999px; padding: 0; background: #d9c2ca; cursor: pointer; transition: width .25s, background .25s; }
+    .carousel-dot[aria-current="true"] { width: 25px; background: var(--rose); }
+    .carousel-hint { margin: .9rem 0 0; color: #947f86; font-size: .82rem; }
+
+    .photo-placeholder span:first-child { font-size: 2.2rem; }
+    .photo-placeholder span:last-child { padding: 0 1rem; font: italic 1rem var(--serif); }
+
+    .wish-section { text-align: center; }
+    .wish-card {
+      max-width: 650px;
+      margin: 0 auto;
+      border-radius: 1.5rem;
+      padding: 3rem 1.5rem;
+      background: linear-gradient(135deg, #ffe9df, #f4eafa);
+    }
+
+    .wish-card p { color: #725c65; font: 1.15rem/1.8 var(--serif); }
+    .heart-button { margin-top: .8rem; font-size: 1rem; }
+    .love-note { min-height: 2rem; margin: 1rem 0 0 !important; color: var(--rose-dark) !important; font-style: italic !important; }
+
+    footer { padding: 2rem 1rem 3rem; color: #947f86; font-size: .85rem; text-align: center; }
+
+    .lightbox { position: fixed; z-index: 15; inset: 0; display: grid; place-items: center; padding: 2rem; background: #211720ed; }
+    .lightbox img { display: block; max-width: min(900px, 92vw); max-height: 82vh; border: 8px solid white; border-radius: 1rem; box-shadow: 0 25px 90px #0008; }
+    .lightbox-close { position: absolute; top: 1rem; right: 1rem; width: 46px; height: 46px; border: 1px solid #ffffff80; border-radius: 50%; color: white; background: #ffffff18; font-size: 1.5rem; cursor: pointer; }
+
+    .float-heart {
+      z-index: 10;
+      bottom: 0;
+      animation: rise 2.5s ease-out forwards;
+    }
+
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity .8s ease, transform .8s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @keyframes twinkle { 0%, 100% { opacity: .45; transform: scale(.85); } 50% { opacity: 1; transform: scale(1.15); } }
+    @keyframes rise { to { opacity: 0; transform: translateY(-90vh) rotate(25deg); } }
+    @keyframes gift-bob { 0%, 100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-10px) rotate(4deg); } }
+    @keyframes photo-arrive { from { opacity: 0; translate: 0 28px; } to { opacity: 1; translate: 0 0; } }
+    @keyframes cue { 0%, 100% { transform: scaleY(.55); transform-origin: top; } 50% { transform: scaleY(1); transform-origin: top; } }
+    @keyframes memory-arrive { from { opacity: .35; transform: scale(1.04); } to { opacity: 1; transform: scale(1); } }
+
+    @media (max-width: 700px) {
+      .photo-carousel { width: min(420px, 100%); padding: 0 2.3rem; }
+      .memory-card { height: min(112vw, 490px); min-height: 290px; }
+      .carousel-arrow { width: 38px; height: 38px; font-size: 1.35rem; }
+      section { padding: 4.5rem 1.15rem; }
+      .letter-section { padding-top: 0; }
+      .music-button { top: .7rem; right: .7rem; padding: .65rem .85rem; }
+      .hero { min-height: 100svh; padding: 6rem 1.35rem 5rem; text-align: center; }
+      .hero-layout { flex-direction: column; gap: 1rem; }
+      .hero-content { width: 100%; }
+      .hero-content .hero-copy { margin: 1.4rem auto 2rem; }
+      .hero-content .hero-note { margin-left: 0; }
+      .hero-visual { width: min(82vw, 350px); height: 330px; }
+      .hero-photo.main { inset: 12px 26px 15px 48px; }
+      .hero-photo.side { inset: 75px 135px 65px -8px; }
+      .hero-badge { right: -3px; bottom: 14px; max-width: 165px; padding: .7rem .9rem; font-size: .92rem; }
+      .hero-badge span { font-size: 1.15rem; }
+      .scroll-cue { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body class="surprise-closed">
+  <div class="opening" id="opening" role="dialog" aria-modal="true" aria-labelledby="opening-title">
+    <span class="opening-star a" aria-hidden="true">✦</span>
+    <span class="opening-star b" aria-hidden="true">✧</span>
+    <span class="opening-star c" aria-hidden="true">✦</span>
+    <div class="opening-content">
+      <span class="gift" aria-hidden="true">🎁</span>
+      <p class="eyebrow">Antes de seguir...</p>
+      <h2 id="opening-title">Tengo algo especial para ti muchachita...</h2>
+      <p>Un pequeño viaje por todo lo bonito que haces sentir. Lo preparé pensando en ti, con muchísimo cariño.</p>
+      <button class="primary-button" id="start-surprise" type="button">Abrir tu sorpresa <span aria-hidden="true">♡</span></button>
+    </div>
+  </div>
+
+  <audio id="birthday-song" loop preload="none">
+    <source src="musica/nuestra-cancion.mpeg" type="audio/mpeg">
+  </audio>
+
+  <button class="music-button" id="music-toggle" type="button" aria-pressed="false">
+    <span aria-hidden="true">♫</span><span id="music-label">Poner nuestra canción</span>
+  </button>
+
+  <main>
+    <section class="hero" aria-labelledby="main-title">
+      <span class="sparkle one" aria-hidden="true">✧</span>
+      <span class="sparkle two" aria-hidden="true">✦</span>
+      <span class="sparkle three" aria-hidden="true">✧</span>
+      <div class="hero-layout">
+        <div class="hero-content">
+          <p class="eyebrow">Hoy celebra el mundo, pero yo te celebro a ti</p>
+          <h1 id="main-title">Feliz cumpleaños, <span>Señorita: María Guadalupe Hernández Ortiz</span></h1>
+          <p class="hero-copy">Porque desde que te he conocido, hasta los días normales tienen algo especial, aunque la mayoria sean por chat jajaja. Hoy quiero devolverte aunque sea un poquito de toda la alegría que tambien me has brindado.</p>
+          <button class="primary-button" id="open-letter" type="button">
+            <span aria-hidden="true">♡</span> Lee lo que mi corazón quiere decirte
+          </button>
+          <p class="hero-note">Una sorpresa hecha pensando en ti, momento a momento</p>
+        </div>
+        <div class="hero-visual" aria-label="Algunos de nuestros recuerdos favoritos">
+          <div class="hero-photo side"><img src="fotos/recuerdo-1.jpeg" alt="Un recuerdo bonito de los dos"></div>
+          <div class="hero-photo main"><img src="fotos/recuerdo-3.jpeg" alt="Una foto juntos en un momento especial"></div>
+          <div class="hero-badge"><span>Mi parte favorita</span>de tantos recuerdos bonitos eres tú ♡</div>
+        </div>
+      </div>
+      <div class="scroll-cue" aria-hidden="true">Sigue la sorpresa</div>
+    </section>
+
+    <section class="letter-section" id="dedicatoria" aria-labelledby="letter-title">
+      <div class="letter reveal">
+        <p class="eyebrow">Unas palabras para ti</p>
+        <h2 class="section-heading" id="letter-title">Feliz cumpleaños, Señorita: María Guadalupe Hernández Ortiz</h2>
+        <p class="salute">Si pudiera pedir un deseo por tu cumpleaños, pediría que hoy te vieras con mis ojos.</p>
+        <p>
+          Verías a una persona increíble: de esas que hacen bien con solo llegar,
+          que convierten cualquier ratito en un recuerdo y que tienen una forma
+          muy suya de quedarse en el corazón. Gracias por cada risa, cada abrazo
+          y por todos esos momentos nuestros que guardo como pequeños tesoros.
+        </p>
+        <p>
+          Ojalá este nuevo año te devuelva multiplicado todo lo bonito que das:
+          que te sobren motivos para reír, que tus sueños encuentren su camino y
+          que nunca dudes de lo mucho que vales. Yo, por mi parte, solo espero
+          seguir sumando recuerdos a tu lado.
+        </p>
+        <p>Hoy no solo celebro el día en que naciste. Celebro la suerte inmensa de haberte encontrado o conocido ese dia que fuimos a la barrera pues jajaja.</p>
+        <p class="signature">Con todo mi cariño ♡</p>
+      </div>
+    </section>
+
+    <section class="memories" aria-labelledby="memories-title">
+      <div class="section-inner center">
+        <p class="eyebrow">Pequeños grandes momentos</p>
+        <h2 class="section-heading" id="memories-title">Nuestra colección de sonrisas</h2>
+        <p class="section-intro">Cada foto guarda un pedacito de todo lo bonito que compartimos.</p>
+        <div class="photo-carousel reveal" id="photo-carousel" aria-label="Galería de recuerdos">
+          <button class="carousel-arrow previous" id="previous-photo" type="button" aria-label="Ver foto anterior">‹</button>
+          <button class="memory-card" id="memory-card" type="button" aria-label="Ampliar foto actual">
+            <img id="carousel-image" src="fotos/recuerdo-1.jpeg" alt="Un recuerdo especial juntos">
+            <div class="photo-placeholder" id="carousel-placeholder" hidden><span aria-hidden="true">♡</span><span>No se pudo cargar esta foto. Revisa el nombre del archivo en la lista.</span></div>
+          </button>
+          <button class="carousel-arrow next" id="next-photo" type="button" aria-label="Ver foto siguiente">›</button>
+          <p class="carousel-caption" id="carousel-caption" aria-live="polite">De esos días que quisiera repetir</p>
+          <div class="carousel-dots" id="carousel-dots" aria-label="Elegir una foto"></div>
+          <p class="carousel-hint">Las fotos cambian solitas, pero puedes recorrerlas a tu ritmo ♡</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="wish-section" aria-labelledby="wish-title">
+      <div class="wish-card reveal">
+        <p class="eyebrow">Un deseo para ti</p>
+        <h2 class="section-heading" id="wish-title">Que la vida te abrace bonito</h2>
+        <p>Que este nuevo capítulo de tus 17s esté lleno de magia, amor y momentos que te hagan decir: “qué feliz me siento”. Y si algún día lo olvidas, vuelve aquí: siempre habrá un recordatorio de cuánto te quiero.</p>
+        <button class="primary-button heart-button" id="send-love" type="button">Toca aquí; tengo algo más que decirte ♡</button>
+        <p class="love-note" id="love-note" aria-live="polite"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer>Hecho para celebrar a una persona irrepetible ♡ - Harinto Jose Rodriguez Cruz</footer>
+
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Foto ampliada" hidden>
+    <button class="lightbox-close" id="close-lightbox" type="button" aria-label="Cerrar foto">×</button>
+    <img id="lightbox-image" alt="">
+  </div>
+
+  <script>
+    const song = document.querySelector("#birthday-song");
+    const musicToggle = document.querySelector("#music-toggle");
+    const musicLabel = document.querySelector("#music-label");
+    const opening = document.querySelector("#opening");
+    const startSurprise = document.querySelector("#start-surprise");
+    const loveNote = document.querySelector("#love-note");
+    const lightbox = document.querySelector("#lightbox");
+    const lightboxImage = document.querySelector("#lightbox-image");
+    const carousel = document.querySelector("#photo-carousel");
+    const carouselImage = document.querySelector("#carousel-image");
+    const carouselCaption = document.querySelector("#carousel-caption");
+    const carouselPlaceholder = document.querySelector("#carousel-placeholder");
+    const carouselDots = document.querySelector("#carousel-dots");
+    const memoryCard = document.querySelector("#memory-card");
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    // Add each new photo here, using its filename and a personal caption.
+    const photos = [
+      { src: "fotos/recuerdo-1.jpeg", alt: "Un recuerdo especial juntos", caption: "De esos días que quisiera repetir" },
+      { src: "fotos/recuerdo-2.jpeg", alt: "Un momento feliz compartido", caption: "Tu risa siempre mejora la foto" },
+      { src: "fotos/recuerdo-3.jpeg", alt: "Otra aventura juntos", caption: "Y que vengan muchísimos más" },
+      { src: "fotos/recuerdo-4.jpeg", alt: "Otra aventura juntos", caption: "Y que vengan muchísimos más" },
+      { src: "fotos/recuerdo-5.jpeg", alt: "Otra aventura juntos", caption: "Y que vengan muchísimos más" },
+      { src: "fotos/recuerdo-6.jpeg", alt: "Otra aventura juntos", caption: "Y que vengan muchísimos más" }
+      
+    ];
+    let loveNoteIndex = 0;
+    let currentPhoto = 0;
+    let carouselTimer;
+    let lastFocusedElement;
+
+    photos.forEach((photo, index) => {
+      const dot = document.createElement("button");
+      dot.className = "carousel-dot";
+      dot.type = "button";
+      dot.setAttribute("aria-label", `Ver foto ${index + 1} de ${photos.length}`);
+      dot.setAttribute("aria-current", index === currentPhoto ? "true" : "false");
+      dot.addEventListener("click", () => showPhoto(index));
+      carouselDots.append(dot);
+    });
+
+    function showPhoto(index) {
+      currentPhoto = (index + photos.length) % photos.length;
+      const photo = photos[currentPhoto];
+      carouselImage.classList.remove("is-changing");
+      carouselPlaceholder.hidden = true;
+      carouselImage.hidden = false;
+      carouselImage.src = photo.src;
+      carouselImage.alt = photo.alt;
+      carouselCaption.textContent = photo.caption;
+      memoryCard.setAttribute("aria-label", `Ampliar foto: ${photo.alt}`);
+      carouselDots.querySelectorAll(".carousel-dot").forEach((dot, dotIndex) => {
+        dot.setAttribute("aria-current", dotIndex === currentPhoto ? "true" : "false");
+      });
+      if (!reducedMotion.matches) {
+        requestAnimationFrame(() => carouselImage.classList.add("is-changing"));
+      }
+    }
+
+    function stopCarousel() {
+      window.clearInterval(carouselTimer);
+      carouselTimer = undefined;
+    }
+
+    function startCarousel() {
+      stopCarousel();
+      if (reducedMotion.matches || document.hidden || opening.isConnected || !lightbox.hidden || photos.length < 2) return;
+      carouselTimer = window.setInterval(() => showPhoto(currentPhoto + 1), 4500);
+    }
+
+    document.querySelector("#previous-photo").addEventListener("click", () => {
+      showPhoto(currentPhoto - 1);
+      startCarousel();
+    });
+    document.querySelector("#next-photo").addEventListener("click", () => {
+      showPhoto(currentPhoto + 1);
+      startCarousel();
+    });
+    carouselImage.addEventListener("load", () => {
+      carouselImage.hidden = false;
+      carouselPlaceholder.hidden = true;
+    });
+    carouselImage.addEventListener("error", () => {
+      carouselImage.hidden = true;
+      carouselPlaceholder.hidden = false;
+    });
+    carousel.addEventListener("mouseenter", stopCarousel);
+    carousel.addEventListener("mouseleave", startCarousel);
+    carousel.addEventListener("focusin", stopCarousel);
+    carousel.addEventListener("focusout", (event) => {
+      if (!carousel.contains(event.relatedTarget)) startCarousel();
+    });
+    document.addEventListener("visibilitychange", startCarousel);
+    reducedMotion.addEventListener("change", startCarousel);
+    startCarousel();
+
+    startSurprise.addEventListener("click", async () => {
+      document.body.classList.remove("surprise-closed");
+      opening.classList.add("is-opening");
+      window.setTimeout(() => {
+        opening.remove();
+        startCarousel();
+      }, 850);
+      burstHearts(30);
+      try {
+        await song.play();
+        musicLabel.textContent = "Pausar nuestra canción";
+        musicToggle.setAttribute("aria-pressed", "true");
+      } catch {
+        musicLabel.textContent = "Agrega tu canción en musica/";
+      }
+    });
+
+    musicToggle.addEventListener("click", async () => {
+      if (song.paused) {
+        try {
+          await song.play();
+          musicLabel.textContent = "Pausar nuestra canción";
+          musicToggle.setAttribute("aria-pressed", "true");
+        } catch {
+          musicLabel.textContent = "Agrega tu canción en musica/";
+        }
+      } else {
+        song.pause();
+        musicLabel.textContent = "Poner nuestra canción";
+        musicToggle.setAttribute("aria-pressed", "false");
+      }
+    });
+
+    document.querySelector("#open-letter").addEventListener("click", () => {
+      document.querySelector("#dedicatoria").scrollIntoView({ behavior: "smooth" });
+      burstHearts(16);
+    });
+
+    document.querySelector("#send-love").addEventListener("click", () => {
+      const messages = [
+        "Eres de esas personas que hacen que todo valga un poquito más la pena. ♡",
+        "Ojalá pudiera guardar tu sonrisa en un frasquito para los días grises.",
+        "Gracias por existir, por ser tú y por hacer mis recuerdos más bonitos.",
+        "Mi deseo favorito es que la vida te quiera tan bonito como tú mereces.",
+        "Si volviera a vivir todos estos momentos, volvería a elegir compartirlos contigo."
+      ];
+      loveNote.textContent = messages[loveNoteIndex % messages.length];
+      loveNoteIndex += 1;
+      burstHearts(28);
+    });
+
+    function burstHearts(count) {
+      const symbols = ["♡", "♥", "✧", "💗"];
+      for (let i = 0; i < count; i += 1) {
+        const heart = document.createElement("span");
+        heart.className = "float-heart";
+        heart.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        heart.style.left = `${Math.random() * 100}vw`;
+        heart.style.fontSize = `${16 + Math.random() * 22}px`;
+        heart.style.color = ["#d66b83", "#edaa8d", "#aa87c4"][i % 3];
+        document.body.append(heart);
+        window.setTimeout(() => heart.remove(), 2600);
+      }
+    }
+
+    memoryCard.addEventListener("click", () => {
+      if (!carouselImage.naturalWidth) return;
+      lastFocusedElement = memoryCard;
+      lightboxImage.src = carouselImage.src;
+      lightboxImage.alt = carouselImage.alt;
+      lightbox.hidden = false;
+      stopCarousel();
+      document.querySelector("#close-lightbox").focus();
+    });
+
+    function closeLightbox() {
+      lightbox.hidden = true;
+      lightboxImage.removeAttribute("src");
+      if (lastFocusedElement) lastFocusedElement.focus();
+      startCarousel();
+    }
+
+    document.querySelector("#close-lightbox").addEventListener("click", closeLightbox);
+    lightbox.addEventListener("click", (event) => {
+      if (event.target === lightbox) closeLightbox();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !lightbox.hidden) closeLightbox();
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll(".reveal").forEach((element) => observer.observe(element));
+  </script>
+</body>
+</html>
